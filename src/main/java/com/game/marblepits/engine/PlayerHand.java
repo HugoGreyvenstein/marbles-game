@@ -1,17 +1,15 @@
 package com.game.marblepits.engine;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @AllArgsConstructor
-@Getter
-@Setter
-public class SowResult
+@Data
+public class PlayerHand
 {
     int position;
     int stones;
-    int pitStones;
+    int initialStones;
 
     public void decrementStones()
     {

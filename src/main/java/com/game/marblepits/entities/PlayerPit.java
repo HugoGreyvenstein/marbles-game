@@ -1,7 +1,9 @@
 package com.game.marblepits.entities;
 
-import com.game.marblepits.engine.SowResult;
-import lombok.Getter;
+import com.game.marblepits.engine.PlayerHand;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,42 +11,51 @@ import javax.persistence.Id;
 import java.util.Arrays;
 
 @Entity
-@Getter
-class PlayerPit
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class PlayerPit
 {
     @Id
     @GeneratedValue
     private Long id;
 
-    private final int[] pits = new int[] {6, 6, 6, 6, 6, 6};
+    private int[] pits = new int[] {6, 6, 6, 6, 6, 6};
     private int largePit = 0;
 
-    public SowResult startSowingFrom(int position)
+    public PlayerHand startSowingFrom(int position)
     {
         int stones = this.pits[position];
         this.pits[position] = 0;
-        return continueSowingFrom(position, stones);
+        return continueSowingFrom(position + 1, stones);
     }
 
-    public SowResult continueSowingFrom(int position, int stones)
+    public PlayerHand continueSowingFrom(int position, int stones)
     {
+        //        assert(position < pits.length && stones > 0);
+
         int pitStones = -1;
-        for (position++; position < pits.length && stones > 0; position++, stones--) {
+        for (; position < pits.length && stones > 0; position++, stones--) {
             pitStones = pits[position]++;
         }
+        return new PlayerHand(position, stones, pitStones);
+    }
 
-//        if (position == 6) {
-//            position = 0;
-//        }
-
-        if (pitStones == -1) throw new RuntimeException();
-
-        return new SowResult(position, stones, pitStones);
+    public int takeStonesAt(int position)
+    {
+        int stones = pits[position];
+        pits[position] = 0;
+        return stones;
     }
 
     public void incrementLargePit()
     {
         this.largePit++;
+    }
+
+    public void addToLargePit(int amount)
+    {
+        largePit += amount;
     }
 
     public int pitsSum()

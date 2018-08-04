@@ -1,14 +1,14 @@
 package com.game.marblepits.entities;
 
-import com.game.marblepits.engine.SowResult;
-import lombok.Getter;
+import com.game.marblepits.engine.PlayerHand;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-@Getter
+@Data
 public class Board
 {
     private Player currentPlayer;
@@ -23,36 +23,53 @@ public class Board
 
     public Player sowFrom(int position)
     {
-        PlayerPit pit = pits.get(currentPlayer);
-        SowResult result = pit.startSowingFrom(position);
-        if (result.hasStones() && result.getPosition() == 6) {
-            result.setPosition(0);
-            pit.incrementLargePit();
-            result.decrementStones();
+        PlayerPit currentPlayersPit = pits.get(currentPlayer);
+        PlayerHand hand = currentPlayersPit.startSowingFrom(position);
+        boolean lastInPit = false;
+        if (hand.hasStones() && hand.getPosition() == 6) {
+            currentPlayersPit.incrementLargePit();
+            hand.decrementStones();
+            lastInPit = true;
+        } else if (!hand.hasStones() && hand.getInitialStones() == 0) {
+            int stones = currentPlayersPit.takeStonesAt(hand.getPosition() - 1);
+            stones += pits.get(Player.other(currentPlayer)).takeStonesAt(6 - hand.getPosition());
+            currentPlayersPit.addToLargePit(stones);
         }
 
         Player whosePit = Player.other(currentPlayer);
-        while (result.hasStones() && result.getPosition() == 6) {
+        while (hand.hasStones()) {
+            lastInPit = false;
             PlayerPit currentPit = pits.get(whosePit);
-            result = currentPit.continueSowingFrom(result.getPosition(), result.getStones());
+            hand = currentPit.continueSowingFrom(0, hand.getStones());
 
-            if (whosePit == currentPlayer) {
+            if (whosePit == currentPlayer && hand.getPosition() == 6) {
                 currentPit.incrementLargePit();
-                result.decrementStones();
+                hand.decrementStones();
+                lastInPit = true;
+            }
+
+            if (!hand.hasStones() && hand.getInitialStones() == 0) {
+                int stones = currentPit.takeStonesAt(hand.getPosition() - 1);
+                stones += pits.get(Player.other(whosePit)).takeStonesAt(6 - hand.getPosition());
+                currentPlayersPit.addToLargePit(stones);
             }
             whosePit = Player.other(whosePit);
         }
 
-        if (currentPlayer.equals(whosePit)) {
-            currentPlayer = whosePit;
-        }
+        //        if (currentPlayer.equals(whosePit)) {
+        //            currentPlayer = whosePit;
+        //        }
 
+        if (lastInPit) {
+            return currentPlayer;
+        }
+        currentPlayer = Player.other(currentPlayer);
         return currentPlayer;
     }
 
-    private boolean shouldEndGame()
+    public boolean shouldEndGame()
     {
-        return pits.get(Player.PLAYER_1).pitsSum() == 0 || pits.get(Player.PLAYER_2).pitsSum() == 0;
+        return pits.values().stream().map(PlayerPit::pitsSum).anyMatch(i -> i == 0);
     }
 
     public enum Player
