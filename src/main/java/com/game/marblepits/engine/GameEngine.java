@@ -1,10 +1,10 @@
 package com.game.marblepits.engine;
 
-import com.game.marblepits.repositories.BoardDao;
 import com.game.marblepits.entities.Board;
-import org.springframework.stereotype.Service;
+import com.game.marblepits.repositories.BoardDao;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class GameEngine
 {
     private BoardDao boardDao;
@@ -16,8 +16,15 @@ public class GameEngine
 
     public Board newGame()
     {
-        return boardDao.save(new Board());
+        Board board = new Board();
+        board.initialize();
+        return boardDao.save(board);
     }
 
-
+    public Board.Player makeMove(Board board, int position)
+    {
+        Board.Player currentPlayer = board.sowFrom(position);
+        boardDao.save(board);
+        return currentPlayer;
+    }
 }
