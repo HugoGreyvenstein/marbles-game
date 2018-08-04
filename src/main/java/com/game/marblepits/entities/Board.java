@@ -56,10 +56,6 @@ public class Board
             whosePit = Player.other(whosePit);
         }
 
-        //        if (currentPlayer.equals(whosePit)) {
-        //            currentPlayer = whosePit;
-        //        }
-
         if (lastInPit) {
             return currentPlayer;
         }

@@ -32,8 +32,6 @@ public class PlayerPit
 
     public PlayerHand continueSowingFrom(int position, int stones)
     {
-        //        assert(position < pits.length && stones > 0);
-
         int pitStones = -1;
         for (; position < pits.length && stones > 0; position++, stones--) {
             pitStones = pits[position]++;
