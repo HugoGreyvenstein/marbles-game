@@ -48,5 +48,16 @@ public class BoardDaoTest
         Assert.assertEquals(this.board, byId);
     }
 
+    @Test
+    public void testUpdatingOfBoard()
+    {
+        Board savedBoard = boardDao.save(this.board);
+        savedBoard.sowFrom(0);
+        savedBoard.sowFrom(1);
+        log.info("my-saved={}", savedBoard);
 
+        Board updatedBoard = boardDao.save(savedBoard);
+        log.info("my-updated={}", savedBoard);
+        Assert.assertEquals(savedBoard, updatedBoard);
+    }
 }
