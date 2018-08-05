@@ -3,6 +3,7 @@ package com.game.marblepits.entities;
 import com.game.marblepits.engine.PlayerHand;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -18,6 +19,7 @@ public class PlayerPit
 {
     @Id
     @GeneratedValue
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     private int[] pits = new int[] {6, 6, 6, 6, 6, 6};

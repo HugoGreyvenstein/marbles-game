@@ -1,4 +1,4 @@
-package com.game.marblepits;
+package com.game.marblepits.game;
 
 import com.game.marblepits.entities.Board;
 import com.game.marblepits.entities.PlayerPit;

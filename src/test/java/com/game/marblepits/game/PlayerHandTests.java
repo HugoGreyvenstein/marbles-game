@@ -1,4 +1,4 @@
-package com.game.marblepits;
+package com.game.marblepits.game;
 
 import com.game.marblepits.engine.PlayerHand;
 import org.junit.Test;
