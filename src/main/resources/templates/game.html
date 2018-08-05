@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Playing game</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
     <p>Game on!</p>
+    <!--<table th:each="player_pits : ${board.pits}">-->
+    <!--<tr th:each="pit : ${player_pits.key}">-->
+    <!--<td th:each="pit : ${pit.pits}" th:text="${pit}"></td>-->
+    <!--</tr>-->
+    <!--</table>-->
+    <table>
+        <!--<tr th:each="pit : ${player_pits.value}">-->
+        <!--<td th:each="pit : ${pit.pits}" th:text="${pit}"></td>-->
+        <!--</tr>-->
+        <tr th:each="player : ${board.pits}">
+            <td th:text="${player.key} + ': '"></td>
+            <td th:each="pit : ${player.value.pits}" th:text="'(' + ${pit} + ')'"></td>
+            <td th:text="'Large pit:'  + ${player.value.largePit}"></td>
+        </tr>
+    </table>
 </body>
 </html>
