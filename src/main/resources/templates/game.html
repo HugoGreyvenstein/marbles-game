@@ -6,23 +6,61 @@
     <meta charset="UTF-8">
     <title>Playing game</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        console.log("initializing ajax");
+
+        $(function () {
+            $("#delete-game-button").click(function () {
+                console.log("trying delete");
+                $.ajax({
+                    url: "/game/" + $("#board-id-div").text(),
+                    type: "DELETE",
+                    success: function (response) {
+                        window.location = "/";
+                    }
+                })
+            });
+
+            $("#move-selector-button").click(function () {
+                console.log("trying put");
+                console.log("selector-value=", $("#move-selector option:selected").val());
+
+                $.ajax({
+                    url: "/game/" + $("#board-id-div").text(),
+                    type: "PUT",
+                    // contentType: "multipart/form-data",
+                    data: {position: $("#move-selector option:selected").val()},
+                    success: function (response) {
+                        window.location = "/game/" + $("#board-id-div").text();
+                    }
+                })
+            });
+        });
+        console.log("done");
+
+    </script>
 </head>
+
 <body>
-    <p>Game on!</p>
-    <!--<table th:each="player_pits : ${board.pits}">-->
-    <!--<tr th:each="pit : ${player_pits.key}">-->
-    <!--<td th:each="pit : ${pit.pits}" th:text="${pit}"></td>-->
-    <!--</tr>-->
-    <!--</table>-->
+<div id="board-id-div" style="display: none" th:text="${board.id}"></div>
+<p th:text="${board.currentPlayer} + ' make a move'"></p>
     <table>
-        <!--<tr th:each="pit : ${player_pits.value}">-->
-        <!--<td th:each="pit : ${pit.pits}" th:text="${pit}"></td>-->
-        <!--</tr>-->
         <tr th:each="player : ${board.pits}">
             <td th:text="${player.key} + ': '"></td>
             <td th:each="pit : ${player.value.pits}" th:text="'(' + ${pit} + ')'"></td>
             <td th:text="'Large pit:'  + ${player.value.largePit}"></td>
         </tr>
     </table>
+<select id="move-selector" name="position">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+</select>
+<button id="move-selector-button" value="Make a move" text="Make a move">Make a move</button>
+<button id="delete-game-button" value="Delete game" text="Delete game">Delete game</button>
 </body>
 </html>

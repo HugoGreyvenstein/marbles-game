@@ -21,10 +21,9 @@ public class GameEngine
         return boardDao.save(board);
     }
 
-    public Board.Player makeMove(Board board, int position)
+    public Board makeMove(Board board, int position)
     {
-        Board.Player currentPlayer = board.sowFrom(position);
-        boardDao.save(board);
-        return currentPlayer;
+        board.sowFrom(position);
+        return boardDao.save(board);
     }
 }

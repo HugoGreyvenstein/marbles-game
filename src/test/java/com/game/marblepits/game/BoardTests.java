@@ -105,4 +105,10 @@ public class BoardTests
         assertEquals(new PlayerPit(null, new int[] {13, 0, 1, 0, 0, 0}, 0), board.getPits().get(PLAYER_1));
         assertEquals(new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0), board.getPits().get(PLAYER_2));
     }
+
+    @Test
+    public void testWinningCondition() throws Exception
+    {
+        throw new Exception("Winning condition test does not exist");
+    }
 }

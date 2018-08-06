@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>All Games</title>
+</head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    console.log("initializing ajax");
+
+    $(function () {
+        $(".delete-button").click(function () {
+            console.log("trying delete");
+            $.ajax({
+                url: "/game/" + $(this).attr("id"),
+                type: "DELETE",
+                success: function (response) {
+                    location.reload(true);
+                }
+            })
+        });
+    });
+    console.log("done");
+
+</script>
+
+<body>
+<p>All games:</p>
+
+<form action="/game" method="POST">
+    <input type="submit" value="Start new game"/>
+</form>
+
+<table>
+    <tr th:each="board : ${allBoards}">
+        <td>
+            <a th:href="'/game/' + ${board.id}" th:text="'Game ' + ${board.id}"></a>
+            <button class="delete-button" th:id="${board.id}">Delete</button>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
