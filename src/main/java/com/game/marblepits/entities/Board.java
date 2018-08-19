@@ -4,14 +4,19 @@ import com.game.marblepits.engine.PlayerHand;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
 @NoArgsConstructor
+@Slf4j
 public class Board
 {
     @Id
@@ -21,7 +26,7 @@ public class Board
     private Player currentPlayer;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Map<Player, PlayerPit> pits = new HashMap<>();
+    private Map<Player, PlayerPit> pits = new LinkedHashMap<>();
 
     public void initialize()
     {
@@ -74,13 +79,37 @@ public class Board
 
     public boolean shouldEndGame()
     {
+
+        List<Integer> integerStream = pits.values().stream().map(PlayerPit::pitsSum).collect(Collectors.toCollection(ArrayList::new));
+        log.trace("pits-sum={}", integerStream);
         return pits.values().stream().map(PlayerPit::pitsSum).anyMatch(i -> i == 0);
+    }
+
+    public int getPlayerScore(Player player)
+    {
+        int score = pits.get(player).score();
+        log.info("player={}, score={}", player, score);
+        return score;
+    }
+
+    public Player getLeader()
+    {
+        int player1Score = pits.get(Player.PLAYER_1).score();
+        int player2Score = pits.get(Player.PLAYER_2).score();
+
+        if (player1Score > player2Score) {
+            return Player.PLAYER_1;
+        } else if (player2Score > player1Score) {
+            return Player.PLAYER_2;
+        }
+        return Player.TIE;
     }
 
     public enum Player
     {
         PLAYER_1,
-        PLAYER_2;
+        PLAYER_2,
+        TIE;
 
         public static Player other(Player player)
         {

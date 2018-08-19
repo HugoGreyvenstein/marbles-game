@@ -44,6 +44,14 @@
 
 <body>
 <div id="board-id-div" style="display: none" th:text="${board.id}"></div>
+<p th:if="${gameFinished}">Game finished!</p>
+<p th:unless="${gameFinished}">Game still in progress</p>
+<p th:text="'Leader: ' + ${leader}" th:unless="${gameFinished}"></p>
+<p th:text="'Winner: ' + ${leader}" th:if="${gameFinished}"></p>
+
+<p th:text="'Player 1: ' + ${board.getPlayerScore('PLAYER_1')}"></p>
+<p th:text="'Player 2: ' + ${board.getPlayerScore('PLAYER_2')}"></p>
+
 <p th:text="${board.currentPlayer} + ' make a move'"></p>
     <table>
         <tr th:each="player : ${board.pits}">
@@ -52,15 +60,17 @@
             <td th:text="'Large pit:'  + ${player.value.largePit}"></td>
         </tr>
     </table>
-<select id="move-selector" name="position">
-    <option value="0">0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-</select>
-<button id="move-selector-button" value="Make a move" text="Make a move">Make a move</button>
+<div th:unless="${gameFinished}">
+    <select id="move-selector" name="position">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <button id="move-selector-button" value="Make a move" text="Make a move">Make a move</button>
+</div>
 <button id="delete-game-button" value="Delete game" text="Delete game">Delete game</button>
 </body>
 </html>

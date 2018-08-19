@@ -26,4 +26,9 @@ public class GameEngine
         board.sowFrom(position);
         return boardDao.save(board);
     }
+
+    public boolean isFinished(Board board)
+    {
+        return board.shouldEndGame();
+    }
 }

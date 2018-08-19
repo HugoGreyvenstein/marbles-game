@@ -104,11 +104,27 @@ public class BoardTests
         assertEquals(PLAYER_2, board.getCurrentPlayer());
         assertEquals(new PlayerPit(null, new int[] {13, 0, 1, 0, 0, 0}, 0), board.getPits().get(PLAYER_1));
         assertEquals(new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0), board.getPits().get(PLAYER_2));
+
+        pits = new HashMap<>();
+        pits.put(PLAYER_1, new PlayerPit(null, new int[] {13, 0, 1, 0, 0, 0}, 0));
+        pits.put(PLAYER_2, new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0));
+        board.setPits(pits);
+        board.setCurrentPlayer(PLAYER_1);
+        board.sowFrom(2);
+        assertEquals(PLAYER_2, board.getCurrentPlayer());
+        assertEquals(new PlayerPit(null, new int[] {13, 0, 0, 0, 0, 0}, 2), board.getPits().get(PLAYER_1));
+        assertEquals(new PlayerPit(null, new int[] {1, 1, 0, 1, 1, 1}, 0), board.getPits().get(PLAYER_2));
     }
 
     @Test
-    public void testWinningCondition() throws Exception
+    public void testWinningCondition()
     {
-        throw new Exception("Winning condition test does not exist");
+        Map<Board.Player, PlayerPit> pits = new HashMap<>();
+        pits.put(PLAYER_1, new PlayerPit(null, new int[] {0, 0, 0, 0, 0, 0}, 1));
+        pits.put(PLAYER_2, new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 10));
+        board.setPits(pits);
+        assertEquals(1, board.getPlayerScore(PLAYER_1));
+        assertEquals(16, board.getPlayerScore(PLAYER_2));
+        assertTrue(board.shouldEndGame());
     }
 }
