@@ -24,10 +24,8 @@ public class GameController
     {
         Board board = boardDao.findById(Long.parseLong(id)).orElseThrow(() -> new Exception("Not found"));
         model.addAttribute("board", board);
+        setWinningConditions(model, board);
 
-        boolean finished = gameEngine.isFinished(board);
-        model.addAttribute("gameFinished", finished);
-        model.addAttribute("leader", board.getLeader());
         return "game";
     }
 
@@ -36,8 +34,7 @@ public class GameController
     {
         Board board = boardDao.findById(Long.parseLong(id)).orElseThrow(() -> new Exception("Not found"));
         model.addAttribute("board", gameEngine.makeMove(board, Integer.parseInt(position)));
-        boolean finished = gameEngine.isFinished(board);
-        model.addAttribute("gameFinished", finished);
+        setWinningConditions(model, board);
 
         return "game";
     }
@@ -63,7 +60,15 @@ public class GameController
     @PostMapping("")
     public String startGame(Model model)
     {
-        model.addAttribute("board", gameEngine.newGame());
+        Board board = gameEngine.newGame();
+        model.addAttribute("board", board);
+        setWinningConditions(model, board);
         return "game";
+    }
+
+    private void setWinningConditions(Model model, Board board)
+    {
+        model.addAttribute("gameFinished", gameEngine.isFinished(board));
+        model.addAttribute("leader", board.getLeader());
     }
 }
