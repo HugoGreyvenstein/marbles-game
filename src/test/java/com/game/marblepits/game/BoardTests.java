@@ -64,7 +64,11 @@ public class BoardTests
         assertEquals(PLAYER_1, board.getCurrentPlayer());
         assertEquals(new PlayerPit(null, new int[] {0, 0, 8, 8, 8, 8}, 2), board.getPits().get(PLAYER_1));
         assertEquals(new PlayerPit(null, new int[] {0, 8, 7, 7, 7, 0}, 9), board.getPits().get(PLAYER_2));
+    }
 
+    @Test
+    public void testNormalSow()
+    {
         Map<Board.Player, PlayerPit> pits = new HashMap<>();
         pits.put(PLAYER_1, new PlayerPit(null, new int[] {3, 1, 1, 1, 0, 0}, 0));
         pits.put(PLAYER_2, new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0));
@@ -74,8 +78,12 @@ public class BoardTests
         assertEquals(PLAYER_2, board.getCurrentPlayer());
         assertEquals(new PlayerPit(null, new int[] {0, 2, 2, 2, 0, 0}, 0), board.getPits().get(PLAYER_1));
         assertEquals(new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0), board.getPits().get(PLAYER_2));
+    }
 
-        pits = new HashMap<>();
+    @Test
+    public void testWithOverflow()
+    {
+        Map<Board.Player, PlayerPit> pits = new HashMap<>();
         pits.put(PLAYER_1, new PlayerPit(null, new int[] {14, 0, 0, 0, 0, 0}, 0));
         pits.put(PLAYER_2, new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0));
         board.setPits(pits);
@@ -84,8 +92,12 @@ public class BoardTests
         assertEquals(PLAYER_2, board.getCurrentPlayer());
         assertEquals(new PlayerPit(null, new int[] {1, 2, 1, 1, 1, 1}, 1), board.getPits().get(PLAYER_1));
         assertEquals(new PlayerPit(null, new int[] {2, 2, 2, 2, 2, 2}, 0), board.getPits().get(PLAYER_2));
+    }
 
-        pits = new HashMap<>();
+    @Test
+    public void testWithOverflowAndCapture()
+    {
+        Map<Board.Player, PlayerPit> pits = new HashMap<>();
         pits.put(PLAYER_1, new PlayerPit(null, new int[] {13, 0, 0, 0, 0, 0}, 0));
         pits.put(PLAYER_2, new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0));
         board.setPits(pits);
@@ -94,8 +106,12 @@ public class BoardTests
         assertEquals(PLAYER_2, board.getCurrentPlayer());
         assertEquals(new PlayerPit(null, new int[] {0, 1, 1, 1, 1, 1}, 4), board.getPits().get(PLAYER_1));
         assertEquals(new PlayerPit(null, new int[] {2, 2, 2, 2, 2, 0}, 0), board.getPits().get(PLAYER_2));
+    }
 
-        pits = new HashMap<>();
+    @Test
+    public void testSowWithZeroStones()
+    {
+        Map<Board.Player, PlayerPit> pits = new HashMap<>();
         pits.put(PLAYER_1, new PlayerPit(null, new int[] {13, 0, 1, 0, 0, 0}, 0));
         pits.put(PLAYER_2, new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0));
         board.setPits(pits);
@@ -104,8 +120,12 @@ public class BoardTests
         assertEquals(PLAYER_2, board.getCurrentPlayer());
         assertEquals(new PlayerPit(null, new int[] {13, 0, 1, 0, 0, 0}, 0), board.getPits().get(PLAYER_1));
         assertEquals(new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0), board.getPits().get(PLAYER_2));
+    }
 
-        pits = new HashMap<>();
+    @Test
+    public void testCapture()
+    {
+        Map<Board.Player, PlayerPit> pits = new HashMap<>();
         pits.put(PLAYER_1, new PlayerPit(null, new int[] {13, 0, 1, 0, 0, 0}, 0));
         pits.put(PLAYER_2, new PlayerPit(null, new int[] {1, 1, 1, 1, 1, 1}, 0));
         board.setPits(pits);
