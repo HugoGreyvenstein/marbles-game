@@ -54,10 +54,37 @@
 
 <p th:text="${board.currentPlayer} + ' make a move'"></p>
     <table>
-        <tr th:each="player : ${board.pits}">
-            <td th:text="${player.key} + ': '"></td>
-            <td th:each="pit : ${player.value.pits}" th:text="'(' + ${pit} + ')'"></td>
-            <td th:text="'Large pit:'  + ${player.value.largePit}"></td>
+        <tr align="center">
+            <td></td>
+            <td></td>
+            <td>5</td>
+            <td>4</td>
+            <td>3</td>
+            <td>2</td>
+            <td>1</td>
+            <td>0</td>
+        </tr>
+        <tr th:with="pits=${board.getPlayer1Pits()}" align="center">
+            <td>Player 1:</td>
+            <td th:text="'Large pit:'  + ${board.getPlayer1LargePit()}"></td>
+            <td th:each="pit : ${pits}" th:text="'(' + ${pit} + ')'"></td>
+            <td></td>
+        </tr>
+        <tr th:with="pits=${board.getPlayer2Pits()}" align="center">
+            <td>Player 2:</td>
+            <td></td>
+            <td th:each="pit : ${pits}" th:text="'(' + ${pit} + ')'"></td>
+            <td th:text="'Large pit:'  + ${board.getPlayer2LargePit()}"></td>
+        </tr>
+        <tr align="center">
+            <td></td>
+            <td></td>
+            <td>0</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
         </tr>
     </table>
 <div th:unless="${gameFinished}">

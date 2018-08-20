@@ -5,12 +5,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -35,7 +33,30 @@ public class Board
         pits.put(Player.PLAYER_2, new PlayerPit());
     }
 
-    public Player sowFrom(int position)
+    public int[] getPlayer1Pits()
+    {
+        int[] pits = Arrays.copyOf(this.pits.get(Player.PLAYER_1).getPits(), 6);
+
+        ArrayUtils.reverse(pits);
+        return pits;
+    }
+
+    public int[] getPlayer2Pits()
+    {
+        return pits.get(Player.PLAYER_2).getPits();
+    }
+
+    public int getPlayer1LargePit()
+    {
+        return pits.get(Player.PLAYER_1).getLargePit();
+    }
+
+    public int getPlayer2LargePit()
+    {
+        return pits.get(Player.PLAYER_2).getLargePit();
+    }
+
+    public void sowFrom(int position)
     {
         PlayerPit currentPlayersPit = pits.get(currentPlayer);
         PlayerHand hand = currentPlayersPit.startSowingFrom(position);
@@ -70,11 +91,9 @@ public class Board
             whosePit = Player.other(whosePit);
         }
 
-        if (lastInPit) {
-            return currentPlayer;
+        if (!lastInPit) {
+            currentPlayer = Player.other(currentPlayer);
         }
-        currentPlayer = Player.other(currentPlayer);
-        return currentPlayer;
     }
 
     public boolean shouldEndGame()
