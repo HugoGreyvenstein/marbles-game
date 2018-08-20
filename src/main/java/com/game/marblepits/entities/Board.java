@@ -61,13 +61,13 @@ public class Board
         PlayerPit currentPlayersPit = pits.get(currentPlayer);
         PlayerHand hand = currentPlayersPit.startSowingFrom(position);
         boolean lastInPit = false;
-        if (hand.hasStones() && hand.getPosition() == 6) {
+        if (hand.hasStones() && hand.getPosition() == NUMBER_OF_PITS) {
             currentPlayersPit.incrementLargePit();
             hand.decrementStones();
             lastInPit = true;
         } else if (!hand.hasStones() && hand.getInitialStones() == 0) {
             int stones = currentPlayersPit.takeStonesAt(hand.getPosition() - 1);
-            stones += pits.get(Player.other(currentPlayer)).takeStonesAt(6 - hand.getPosition());
+            stones += pits.get(Player.other(currentPlayer)).takeStonesAt(NUMBER_OF_PITS - hand.getPosition());
             currentPlayersPit.addToLargePit(stones);
         }
 
@@ -77,7 +77,7 @@ public class Board
             PlayerPit currentPit = pits.get(whosePit);
             hand = currentPit.continueSowingFrom(0, hand.getStones());
 
-            if (whosePit == currentPlayer && hand.getPosition() == 6) {
+            if (whosePit == currentPlayer && hand.getPosition() == NUMBER_OF_PITS) {
                 currentPit.incrementLargePit();
                 hand.decrementStones();
                 lastInPit = true;
@@ -85,7 +85,7 @@ public class Board
 
             if (!hand.hasStones() && hand.getInitialStones() == 0) {
                 int stones = currentPit.takeStonesAt(hand.getPosition() - 1);
-                stones += pits.get(Player.other(whosePit)).takeStonesAt(6 - hand.getPosition());
+                stones += pits.get(Player.other(whosePit)).takeStonesAt(NUMBER_OF_PITS - hand.getPosition());
                 currentPlayersPit.addToLargePit(stones);
             }
             whosePit = Player.other(whosePit);
@@ -137,4 +137,6 @@ public class Board
             return PLAYER_1;
         }
     }
+
+    private static final int NUMBER_OF_PITS = 6;
 }
